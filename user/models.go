@@ -8,3 +8,9 @@ type User struct{
 	Password string
 }
 
+type LoginUserForm struct{
+	Email string `json:"email"`
+	Password string `json:"password"`
+
+}
+

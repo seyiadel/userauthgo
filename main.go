@@ -17,6 +17,7 @@ func main(){
 
 	router := http.NewServeMux()
 	router.HandleFunc("/signup", user.SignUpHandler)
+	router.HandleFunc("/login", user.LoginHandler)
 
 	server := &http.Server{
 		Addr:	"0.0.0.0:8080",
