@@ -67,7 +67,7 @@ func LoginHandler(response http.ResponseWriter, request *http.Request){
 		return
 	}
 
-	token, err := token.GenerateJWT()
+	token, err := token.GenerateJWT(user.Email)
 	if err != nil{
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{"response":"`+ err.Error()+`"}`))
@@ -80,5 +80,10 @@ func LoginHandler(response http.ResponseWriter, request *http.Request){
 		panic(err)
 	}
 	response.WriteHeader(http.StatusOK)
+	 
+}
+
+func UserProfileHandler(response http.ResponseWriter, request *http.Request){
+	response.Write([]byte("Authenticated Route"))
 	
 }
