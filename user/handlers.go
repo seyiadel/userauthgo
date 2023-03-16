@@ -84,6 +84,8 @@ func LoginHandler(response http.ResponseWriter, request *http.Request){
 }
 
 func UserProfileHandler(response http.ResponseWriter, request *http.Request){
-	response.Write([]byte("Authenticated Route"))
+	getUser := request.Context().Value("loggedInUser")
+
+	json.NewEncoder(response).Encode(getUser)
 	
 }

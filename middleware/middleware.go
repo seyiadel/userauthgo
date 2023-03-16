@@ -17,8 +17,8 @@ func IsAuthorized(handler http.HandlerFunc) http.Handler{
 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request){
 		headerToken := request.Header.Get("Authorization")
 		cleanedToken := strings.TrimPrefix(headerToken, "Bearer ")
-		fmt.Println(cleanedToken)
-
+		
+		//Token Validation
 		token, err := jwt.Parse(cleanedToken,func(token *jwt.Token)(interface{}, error){
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok{
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -28,16 +28,14 @@ func IsAuthorized(handler http.HandlerFunc) http.Handler{
 		})
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if ok && token.Valid{
-			fmt.Println(claims)
+			fmt.Println(claims["sub"])
 		} else{
-			fmt.Println("Validate Token Error >>")
 			fmt.Println(err)
 		}
-		ctx := context.WithValue(request.Context(), "loggedInUser", claims)
+		//To share 
+		ctx := context.WithValue(request.Context(), "loggedInUser", claims["sub"])
 
 		handler.ServeHTTP(response, request.WithContext(ctx))
-
-
 
 	})
 
