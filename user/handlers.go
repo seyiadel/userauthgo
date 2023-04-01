@@ -14,10 +14,7 @@ import (
 func SignUpHandler(response http.ResponseWriter, request *http.Request){
 	response.Header().Set("content-type", "application/json")
 	
-	var body struct{
-		Email string
-		Password string
-	}
+	var body SignUpUser
 
 	_= json.NewDecoder(request.Body).Decode(&body)
 
@@ -26,16 +23,23 @@ func SignUpHandler(response http.ResponseWriter, request *http.Request){
 		panic(err)
 	}
 
-	user := User{
+	user := SignUser{
 		Email:body.Email,
+                FirstName: body.FirstName,
+                LastName: body.LastName,
 		Password: string(hashPassword),
 	}
 	
 	//Add user Info to "gorm" database
 	initializer.DB.Create(&user)
 	
+        output_user:= User{
+                     Email: user.Email,
+                     FirstName: user.FirstName,
+                     LastName: user.LastName,
+        }
 
-	err = json.NewEncoder(response).Encode(user)
+	err = json.NewEncoder(response).Encode(output_user)
 	if err != nil{ 
 		response.WriteHeader(http.StatusBadRequest)
 		panic(err)
